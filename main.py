@@ -8,13 +8,36 @@ import argparse
 
 warnings.filterwarnings("ignore", category=FutureWarning)
 
+def remove_background(img):
+    mask = np.zeros(img.shape[:2], np.uint8)
+    bgdModel = np.zeros((1, 65), np.float64)
+    fgdModel = np.zeros((1, 65), np.float64)
+    rect = (10, 10, img.shape[1] - 20, img.shape[0] - 20)  # 이미지 가장자리 제외
+    cv2.grabCut(img, mask, rect, bgdModel, fgdModel, 5, cv2.GC_INIT_WITH_RECT)
+    mask2 = np.where((mask == 2) | (mask == 0), 0, 1).astype('uint8')
+    img = img * mask2[:, :, np.newaxis]
+    return img
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--background', type=bool, default=True, help='Define removing background or not')
     opt = parser.parse_args()
 
     img=cv2.imread("./input/model.jpg")
-    model_img=cv2.resize(img,(768,1024))
+    # (768, 1024) 크기로 맞추기
+    if img.shape[:2] != (1024, 768):  # 높이와 너비 비교
+        model_img = cv2.resize(img, (768, 1024))  # OpenCV는 (width, height) 순서로 받음
+        print("Resized to (768, 1024)")
+    else:
+        model_img = img
+        print("Already (768, 1024)")
+    
+    # 배경 제거 옵션 적용
+    if opt.background:
+        print("Removing background...")
+        model_img = remove_background(model_img)
+
+    # 저장
     cv2.imwrite("./model.jpg", model_img)
 
     img=cv2.imread("model.jpg")
@@ -74,6 +97,7 @@ if __name__ == '__main__':
     print("\nGenerate Human Parsing agnoistic")
     terminnal_command = "python get_agnostic.py --data_path HR-VITON/test/test --output_path HR-VITON/test/test/agnostic-v3.2"
     os.system(terminnal_command)
+    
     # Run HR-VITON to generate final image
     print("\nRun HR-VITON to generate final image\n")
     os.chdir("./HR-VITON")
