@@ -13,7 +13,7 @@ def load_model(use_hand=False):
     hand_estimation = Hand('./model/hand_pose_model.pth') if use_hand else None
     return body_estimation, hand_estimation
 
-def inference_and_save(image_path, body_estimation, hand_estimation, output_json_path):
+def inference_and_save(image_path, body_estimation, hand_estimation, output_json_path, output_img_path):
     oriImg = cv2.imread(image_path)  # B,G,R order
     if oriImg is None:
         print(f"Error: Could not read image from path {image_path}")
@@ -83,10 +83,17 @@ def inference_and_save(image_path, body_estimation, hand_estimation, output_json
 
         json_data["people"].append(person_data)
 
+    # JSON 파일 저장
     os.makedirs(output_json_path, exist_ok=True)
     with open(json_path, "w") as json_file:
         json.dump(json_data, json_file, indent=4)
     print(f"JSON saved at {json_path}")
+
+    # 렌더링된 이미지 저장
+    img_path = os.path.join(output_img_path, "00001_00_rendered.png")
+    os.makedirs(output_img_path, exist_ok=True)
+    cv2.imwrite(img_path, canvas)
+    print(f"Rendered image saved at {img_path}")
 
 
 if __name__ == "__main__":
@@ -96,13 +103,15 @@ if __name__ == "__main__":
     # 입력 및 출력 경로 설정
     input_path = './input/model.jpg'  # 단일 이미지 파일 경로
     output_json_path = './HR-VITON/test/test/openpose_json'  # JSON 저장 경로
+    output_img_path = './HR-VITON/test/test/openpose_img'  # 이미지 저장 경로
 
-    # Ensure output directory exists
+    # Ensure output directories exist
     os.makedirs(output_json_path, exist_ok=True)
+    os.makedirs(output_img_path, exist_ok=True)
 
     # 단일 이미지 처리
     if not input_path.endswith(('.jpg', '.png')):
         raise ValueError(f"Unsupported file format: {input_path}")
 
     print(f'Processing: {input_path}')
-    inference_and_save(input_path, body_estimation, hand_estimation, output_json_path)
+    inference_and_save(input_path, body_estimation, hand_estimation, output_json_path, output_img_path)
