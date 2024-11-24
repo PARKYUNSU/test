@@ -62,12 +62,8 @@ if __name__ == '__main__':
     img=cv2.resize(img_seg,(768,1024))
     cv2.imwrite('./HR-VITON/test/test/image/00001_00.jpg',img)
 
-    # terminnal_command ="python grayscale.py"
-    # os.system(terminnal_command)
-    # 입력 이미지 경로
-    
-    cv2.imwrite("./resized_segmentation_img.png", mask_img)
-    cv2.imwrite('./HR-VITON/test/test/image-parse-v3/00001_00.jpg', img_seg)
+    terminnal_command ="python grayscale.py"
+    os.system(terminnal_command)
 
     # Generate Densepose image using detectron2 library
     print("\nGenerate Densepose image using detectron2 library\n")
