@@ -66,9 +66,8 @@ if __name__ == '__main__':
     # os.system(terminnal_command)
     # 입력 이미지 경로
     
-    cv2.imwrite("./resized_segmentation_img.png")
-    cv2.imwrite('./HR-VITON/test/test/image-parse-v3/00001_00.jpg',img)
-
+    cv2.imwrite("./resized_segmentation_img.png", mask_img)
+    cv2.imwrite('./HR-VITON/test/test/image-parse-v3/00001_00.jpg', img_seg)
 
     # Generate Densepose image using detectron2 library
     print("\nGenerate Densepose image using detectron2 library\n")
