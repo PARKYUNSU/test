@@ -12,7 +12,7 @@ Fashion-U-Want is a high-resolution virtual try-on system that uses deep learnin
 
 Click the badge below to run the demo:
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/PARKYUNSU/Fashion-U-Want-Virtual-Try-On/blob/main/Try_TRYON.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/PARKYUNSU/test/blob/main/Try_TRYON.ipynb)
 
 
 ## Reference
