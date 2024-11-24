@@ -7,6 +7,8 @@ from PIL import Image, ImageDraw
 
 import argparse
 
+from tqdm import tqdm
+
 
 def get_im_parse_agnostic(im_parse, pose_data, w=768, h=1024):
     parse_array = np.array(im_parse)
@@ -52,7 +54,7 @@ if __name__=="__main__":
     
     os.makedirs(output_path, exist_ok=True)
     
-    for im_name in os.listdir(osp.join(data_path, 'image')):
+    for im_name in tqdm(os.listdir(osp.join(data_path, 'image'))):
         
         # load pose image
         pose_name = im_name.replace('.jpg', '_keypoints.json')
